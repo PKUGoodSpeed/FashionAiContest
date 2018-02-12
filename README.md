@@ -1,27 +1,36 @@
-# Toxic Comment Classification Challenge
-**Link:** https://www.kaggle.com/c/jigsaw-toxic-comment-classification-challenge#description
+# [2018 Fashion AI Global Challenge](https://tianchi.aliyun.com/markets/tianchi/FashionAIeng?_lang=en_US)
 
-**Description:**
-Discussing things you care about can be difficult. The threat of abuse and harassment online means that many people stop expressing themselves and give up on seeking different opinions. Platforms struggle to effectively facilitate conversations, leading many communities to limit or completely shut down user comments.
-The [Conversation AI](https://conversationai.github.io/) team, a research initiative founded by [Jigsaw](https://jigsaw.google.com/) and Google (both a part of Alphabet) are working on tools to help improve online conversation. One area of focus is the study of negative online behaviors, like toxic comments (i.e. comments that are rude, disrespectful or otherwise likely to make someone leave a discussion). So far they’ve built a range of publicly available models served through the [Perspective API](https://perspectiveapi.com/), including toxicity. But the current models still make errors, and they don’t allow users to select which types of toxicity they’re interested in finding (e.g. some platforms may be fine with profanity, but not with other types of toxic content).
-In this competition, you’re challenged to build a multi-headed model that’s capable of detecting different types of of toxicity like threats, obscenity, insults, and identity-based hate better than Perspective’s [current models](https://github.com/conversationai/unintended-ml-bias-analysis). You’ll be using a dataset of comments from Wikipedia’s talk page edits. Improvements to the current model will hopefully help online discussion become more productive and respectful.
+## Intro:
+Upgrades in consumption patterns mean that there is significant room for potential growth in the fashion industry. According to official statistics from different countries, the market value of the global apparel market is worth over USD 3 trillion. Although artificial intelligence (AI) technology has been evolving along with the fashion industry, there are still different challenges in different areas that need to be addressed.
 
-**Evaluation:**
-Submissions are evaluated on the mean column-wise [log loss](https://www.kaggle.com/wiki/LogLoss). In other words, the score is the average of the log loss of each predicted column.
-**Submission File:**
-For each `id` in the test set, you must predict a probability for each of the six possible types of comment toxicity (toxic, severe_toxic, obscene, threat, insult, identity_hate). The columns must be in the same order as shown below. The file should contain a header and have the following format:
+The Vision & Beauty Team, Alibaba Group and Institute of Textile & Clothing, The Hong Kong Polytechnic University are pleased to announce that they are co-organizing the FashionAI Global Challenge 2018, which will jointly launch a revolutionary dataset which integrates both professional fashion knowledge and machine learning formulation. The world's first FashionAI Global Challenge offers RMB 1.34 million prize pool, inviting you to solve the imminent issues on the application of AI in fashion.
 
-    id,toxic,severe_toxic,obscene,threat,insult,identity_hate
-    6044863,0.5,0.5,0.5,0.5,0.5,0.5
-    6102620,0.5,0.5,0.5,0.5,0.5,0.5
-    etc.
+## Description
+#### Key Points Detection of Apparel
+The analysis of apparel with computers could be easily affected by the dimension and shape of the apparel, distance and angle of shooting, or even how the apparel is displayed or the model is posing. Contestants are invited to design algorithms to detect key points of apparel images. This task can help to improve the performance of applications such as alignment, recognition of the local attributes and auto-editing of the images of apparel.
 
+#### Attributes Recognition of Apparel
+Apparel attributes are the basic knowledge of fashion field, which are large and complex. We constructed a hierarchical attributes tree as a structured classification target, to describe the cognitive process of apparel. Contestants are invited to design algorithms to recognize attributes of apparel images. This task might be widely applied for apparel image searching, navigating tagging, mix-and-match recommendation, etc.
 
-**Group name candidates:**  
+## TimeLine:
+1. Application: 02.01-04.21
+2. Preliminary: 03.01-04.21
+3. Semi-final: 04.26-05.24
+4. Final and Award Presentation: 07.05
 
-- **Phantom Brigade** 
+The challenge consists of a preliminary and a semi-final competition online. Interested individuals can download the data, design the algorithms and carry out debugging, and then submit the results online. The final is an offline competition, which requires candidates to perform live roadshows and take part in debates. All times mentioned above are UTC+8. 
 
-**Group Rule:**
+## Eligibility
+The FashionAI Global Challenge 2018 is open to the public. Interested individuals, researchers/developers of tertiary education, research institutes or organizations from different sectors and fields are welcome to take part independently or as a team.
+Note: Employees of the co-organizers and supporting organizations who have access to the related data are not allowed to take part in the FashionAI Global Challenge 2018.
+
+## Application
+1. Application start date: 1 February 2018(UTC +8)
+2. Deadline for application and changes to team members: 21 April 2018 at 12:00 pm (UTC +8)
+3. Team size: Up to 8 members. Each individual can only be part of one team
+4. The organizers reserve the right to disqualify participants if the information provided on the application is inaccurate or misleading
+
+## Group Rule:
 
 1. **Team members share codes here**
 2. **Every person creates his/her own folder and put codes there.**
@@ -30,8 +39,6 @@ For each `id` in the test set, you must predict a probability for each of the si
 5. **All the executable files must be moved to a folder with name "apps”**
 
 **[Discussion paper](https://paper.dropbox.com/doc/New-Ideas-Post-here-bIBrgHTcmLzXW3iNS7OiS)**
-
-**[Word2Vec pretrained models](http://ahogrammer.com/2017/01/20/the-list-of-pretrained-word-embeddings/)**
 
 **[Google Colab free GPU tutorial](https://medium.com/deep-learning-turkey/google-colab-free-gpu-tutorial-e113627b9f5d)**
 
