@@ -38,7 +38,7 @@ Note: Employees of the co-organizers and supporting organizations who have acces
 4. **All the datasets must be moved to a folder with name "data"**
 5. **All the executable files must be moved to a folder with name "apps”**
 
-**[Discussion paper](https://paper.dropbox.com/doc/New-Ideas-Post-here-bIBrgHTcmLzXW3iNS7OiS)**
+**[Discussion paper](https://paper.dropbox.com/doc/Group-discussion-pc4VhnKQkwvHHjqrL2ZfV)**
 
 **[Google Colab free GPU tutorial](https://medium.com/deep-learning-turkey/google-colab-free-gpu-tutorial-e113627b9f5d)**
 
