@@ -54,13 +54,10 @@ class VggNet:
     
     def buildModel(self, dense_list):
         '''
-        kargs_list: list of key arguments
-        dropout_list: list of dropout ratios
         For dense layers, the dropouts are always 0.5
         den_list: key arg list for den layers
         '''
         in_layer = Input(self.input_shape)
-        assert len(kargs_list) == len(dropout_list), "key arguments and dropouts do not match."
         
         # build vgg_block
         model_vgg16_conv = VGG16(weights='imagenet', include_top=False)
