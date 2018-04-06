@@ -96,11 +96,11 @@ class ImagePrec:
                 else:
                     x.append(_crop_center(img, margin=0.1))
         print("Time usage for generating batch is {TIME} sec.".format(TIME=str(time.time() - start_time)))
-        return x, y
+        return np.array(x), np.array(y)
         
 
 if __name__ == '__main__':
-    fname = "../data/web/Annotations/skirt_length_labels.csv"
+    fname = "../data/base/Annotations/label.csv"
     path = "../data/web"
     category = "collar_design_labels"
     ip = ImagePrec(category=category, lable_file=fname, img_path=path)
