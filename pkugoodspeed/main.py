@@ -10,11 +10,13 @@ from process import ImagePrec
 from train import Trainer
 from dennet import DenseNet
 from naive import NaiveCnnNet, VggNet
+from resnet import ResNet
 
 model_dict = {
     'densenet': DenseNet,
     'naive': NaiveCnnNet,
-    'vgg': VggNet
+    'vgg': VggNet,
+    'resnet': ResNet
 }
 
 if __name__ == '__main__':

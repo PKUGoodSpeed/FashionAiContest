@@ -1,5 +1,5 @@
 import os
-from keras.optimizers import SGD, Adam
+from keras.optimizers import SGD, Adam, Adadelta, RMSprop, Adagrad
 from keras.callbacks import LearningRateScheduler, Callback, EarlyStopping, ModelCheckpoint
 
 global_learning_rate = 0.01
