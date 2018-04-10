@@ -44,13 +44,13 @@ class ResNet:
                 layerB = Conv2D(filters=int(n_filters/2), kernel_size=3, padding="same") (layerB)
                 layerB = Activation('relu') (BatchNormalization(axis=-1) (layerB))
                 layerB = Conv2D(filters=2*n_filters, kernel_size=3, padding="same") (layerB)
-                layerB = Dropout(min(0.6, 2 * dropout_ratio)) (layerB)
+                layerB = Dropout(min(0.5, 2 * dropout_ratio)) (layerB)
                 kernel = merge([kernel, layerB], mode='sum')
             
             kernel = Activation('relu') (BatchNormalization(axis=-1) (kernel))
             kernel = MaxPooling2D((2, 2)) (kernel)
             n_filters *= 2
-            dropout_ratio = min(0.5, 2*dropout_ratio)
+            dropout_ratio = min(0.4, 2*dropout_ratio)
         
         denlayer = GlobalAveragePooling2D() (kernel)
         # denlayer = GlobalMaxPooling2D() (layerA)
