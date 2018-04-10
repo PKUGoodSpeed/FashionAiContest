@@ -35,7 +35,7 @@ class Trainer:
         change_lr = LearningRateScheduler(scheduler)
         
         ## Set early stopper:
-        earlystopper = EarlyStopping(monitor='val_loss', patience=5, verbose=1, mode='auto')
+        earlystopper = EarlyStopping(monitor='val_loss', patience=17, verbose=1, mode='auto')
         
         ## Set Check point
         if not os.path.exists(checker_path):
@@ -44,10 +44,10 @@ class Trainer:
         checkpointer = ModelCheckpoint(filepath=checker, monitor='val_loss', verbose=1, save_best_only=True, mode='auto')
         
         if valid_set is None:
-            history = self.model.fit(x, y, epochs=epochs, verbose=1, validation_split=0.1,
+            history = self.model.fit(x, y, epochs=epochs, verbose=1, validation_split=0.1, batch_size=16,
             callbacks=[earlystopper, checkpointer, change_lr])
         else:
-            history = self.model.fit(x, y, epochs=epochs, verbose=1, validation_data=valid_set, 
+            history = self.model.fit(x, y, epochs=epochs, verbose=1, validation_data=valid_set, batch_size=16,
             callbacks=[earlystopper, checkpointer, change_lr])
         return history
     
