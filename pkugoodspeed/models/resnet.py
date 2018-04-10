@@ -37,7 +37,7 @@ class ResNet:
             layerB = Dropout(dropout_ratio) (layerB)
             kernel = merge([layerA, layerB], mode='sum')
             
-            for _ in range(3):
+            for _ in range(1):
                 layerB = Activation('relu') (BatchNormalization(axis=-1) (kernel))
                 layerB = Conv2D(filters=int(n_filters/2), kernel_size=3, padding="same") (layerB)
                 layerB = Activation('relu') (BatchNormalization(axis=-1) (layerB))
