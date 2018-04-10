@@ -27,12 +27,12 @@ class ResNet:
         kernel = BatchNormalization(axis=-1) (Conv2D(filters=n_filters, kernel_size=3, padding="same") (in_layer))
         kernel = Activation('relu') (kernel)
         for _ in range(depth):
-            layerA = Conv2D(filters=2*n_filters, kernel_size=3, padding="same") (kernel)
+            layerA = Conv2D(filters=2*n_filters, kernel_size=5, padding="same") (kernel)
             layerB = Conv2D(filters=int(n_filters/2), kernel_size=3, padding="same") (kernel)
             layerB = Activation('relu') (BatchNormalization(axis=-1) (layerB))
             layerB = Conv2D(filters=int(n_filters/2), kernel_size=3, padding="same") (layerB)
             layerB = Activation('relu') (BatchNormalization(axis=-1) (layerB))
-            layerB = Conv2D(filters=2*n_filters, kernel_size=3, padding="same") (layerB)
+            layerB = Conv2D(filters=2*n_filters, kernel_size=5, padding="same") (layerB)
             kernel = merge([layerA, layerB], mode='sum')
             
             for _ in range(res_num):
@@ -41,7 +41,7 @@ class ResNet:
                 layerB = Activation('relu') (BatchNormalization(axis=-1) (layerB))
                 layerB = Conv2D(filters=int(n_filters/2), kernel_size=3, padding="same") (layerB)
                 layerB = Activation('relu') (BatchNormalization(axis=-1) (layerB))
-                layerB = Conv2D(filters=2*n_filters, kernel_size=3, padding="same") (layerB)
+                layerB = Conv2D(filters=2*n_filters, kernel_size=5, padding="same") (layerB)
                 kernel = merge([kernel, layerB], mode='sum')
             
             kernel = Activation('relu') (BatchNormalization(axis=-1) (kernel))
