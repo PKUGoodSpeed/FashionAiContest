@@ -10,13 +10,14 @@ from process import ImagePrec
 from train import Trainer
 from dennet import DenseNet
 from naive import NaiveCnnNet, VggNet
-from resnet import ResNet
+from resnet import ResNet, KerasResNet
 
 model_dict = {
     'densenet': DenseNet,
     'naive': NaiveCnnNet,
     'vgg': VggNet,
-    'resnet': ResNet
+    'resnet': ResNet,
+    'kerasresnet': KerasResNet
 }
 
 if __name__ == '__main__':

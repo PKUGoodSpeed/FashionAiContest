@@ -62,6 +62,7 @@ class VggNet:
         # build vgg_block
         model_vgg16_conv = VGG16(weights='imagenet', include_top=False)
         vgg16_block = model_vgg16_conv(in_layer)
+        print vgg16_block.shape
         
         # denlayer = GlobalAveragePooling2D() (layerA)
         # denlayer = GlobalMaxPooling2D() (layerA)

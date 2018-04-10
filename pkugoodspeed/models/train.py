@@ -28,7 +28,7 @@ class Trainer:
         def scheduler(epoch):
             global global_learning_rate
             global global_decaying_rate
-            if epoch %2 == 0:
+            if epoch%3 == 0:
                 global_learning_rate *= global_decaying_rate
                 print("CURRENT LEARNING RATE = " + str(global_learning_rate))
             return global_learning_rate
