@@ -28,23 +28,23 @@ class ResNet:
         kernel = Activation('relu') (kernel)
         for _ in range(depth):
             layerA = Conv2D(filters=2*n_filters, kernel_size=3, padding="same") (kernel)
-            layerA = Dropout(dropout_ratio) (layerA)
+            # layerA = Dropout(dropout_ratio) (layerA)
             layerB = Conv2D(filters=int(n_filters/2), kernel_size=3, padding="same") (kernel)
             layerB = Activation('relu') (BatchNormalization(axis=-1) (layerB))
             layerB = Conv2D(filters=int(n_filters/2), kernel_size=3, padding="same") (layerB)
             layerB = Activation('relu') (BatchNormalization(axis=-1) (layerB))
             layerB = Conv2D(filters=2*n_filters, kernel_size=3, padding="same") (layerB)
-            layerB = Dropout(dropout_ratio) (layerB)
+            # layerB = Dropout(dropout_ratio) (layerB)
             kernel = merge([layerA, layerB], mode='sum')
             
-            for _ in range(1):
+            for _ in range(4):
                 layerB = Activation('relu') (BatchNormalization(axis=-1) (kernel))
                 layerB = Conv2D(filters=int(n_filters/2), kernel_size=3, padding="same") (layerB)
                 layerB = Activation('relu') (BatchNormalization(axis=-1) (layerB))
                 layerB = Conv2D(filters=int(n_filters/2), kernel_size=3, padding="same") (layerB)
                 layerB = Activation('relu') (BatchNormalization(axis=-1) (layerB))
                 layerB = Conv2D(filters=2*n_filters, kernel_size=3, padding="same") (layerB)
-                layerB = Dropout(min(0.5, 2 * dropout_ratio)) (layerB)
+                # layerB = Dropout(min(0.5, 2 * dropout_ratio)) (layerB)
                 kernel = merge([kernel, layerB], mode='sum')
             
             kernel = Activation('relu') (BatchNormalization(axis=-1) (kernel))
@@ -52,9 +52,9 @@ class ResNet:
             n_filters *= 2
             dropout_ratio = min(0.4, 2*dropout_ratio)
         
-        denlayer = GlobalAveragePooling2D() (kernel)
+        # denlayer = GlobalAveragePooling2D() (kernel)
         # denlayer = GlobalMaxPooling2D() (layerA)
-        # denlayer = Flatten() (kernel)
+        denlayer = Flatten() (kernel)
         
         # adding dense layers
         for kargs in dense_list:
