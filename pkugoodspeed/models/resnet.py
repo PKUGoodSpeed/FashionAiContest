@@ -23,7 +23,7 @@ class ResNet:
         
         # build resnet blocks
         n_filters = n_filters
-        dropout_ratio = 0.1
+        dropout_ratio = 0.05
         kernel = BatchNormalization(axis=-1) (Conv2D(filters=n_filters, kernel_size=3, padding="same") (in_layer))
         kernel = Activation('relu') (kernel)
         for _ in range(depth):
