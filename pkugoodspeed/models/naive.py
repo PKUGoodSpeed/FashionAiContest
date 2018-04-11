@@ -1,6 +1,6 @@
 from keras.models import Model
 from keras.layers import Input, Conv2D, Activation, Dropout, Lambda, Dense
-from keras.layers import MaxPooling2D, AveragePooling2D, concatenate
+from keras.layers import MaxPooling2D, AveragePooling2D, concatenate, BatchNormalization
 from keras.layers import GlobalMaxPooling2D, GlobalAveragePooling2D, Flatten
 from keras.applications.vgg16 import VGG16
 
@@ -62,15 +62,19 @@ class VggNet:
         # build vgg_block
         model_vgg16_conv = VGG16(weights='imagenet', include_top=False)
         vgg16_block = model_vgg16_conv(in_layer)
+        model_vgg16_conv.summary()
+        vgg16_block = Conv2D(512, kernel_size=2) (vgg16_block)
+        vgg16_block = Activation('elu') (BatchNormalization(axis=-1) (vgg16_block))
+        vgg16_block = Dropout(0.25) (vgg16_block)
         print vgg16_block.shape
         
-        # denlayer = GlobalAveragePooling2D() (layerA)
-        # denlayer = GlobalMaxPooling2D() (layerA)
+        # denlayer = GlobalAveragePooling2D() (vgg16_block)
+        # denlayer = GlobalMaxPooling2D() (vgg16_block)
         denlayer = Flatten() (vgg16_block)
         
         # adding dense layers
         for kargs in dense_list:
-            denlayer = Dropout(0.5) (Dense(**kargs) (denlayer))
+            denlayer = Dropout(0.7) (Dense(**kargs) (denlayer))
         
         out_layer = Dense(self.output_dim, activation='softmax') (denlayer)
         self.model = Model(inputs=[in_layer], outputs=[out_layer])
