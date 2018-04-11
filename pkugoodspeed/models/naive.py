@@ -68,13 +68,13 @@ class VggNet:
         vgg16_block = Dropout(0.25) (vgg16_block)
         print vgg16_block.shape
         
-        # denlayer = GlobalAveragePooling2D() (vgg16_block)
+        denlayer = GlobalAveragePooling2D() (vgg16_block)
         # denlayer = GlobalMaxPooling2D() (vgg16_block)
-        denlayer = Flatten() (vgg16_block)
+        # denlayer = Flatten() (vgg16_block)
         
         # adding dense layers
         for kargs in dense_list:
-            denlayer = Dropout(0.7) (Dense(**kargs) (denlayer))
+            denlayer = Dropout(0.68) (Dense(**kargs) (denlayer))
         
         out_layer = Dense(self.output_dim, activation='softmax') (denlayer)
         self.model = Model(inputs=[in_layer], outputs=[out_layer])

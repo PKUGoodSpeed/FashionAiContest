@@ -49,6 +49,7 @@ class ResNet:
             kernel = Dropout(0.1) (kernel)
             n_filters *= 2
         
+        print kernel.shape
         denlayer = GlobalAveragePooling2D() (kernel)
         # denlayer = GlobalMaxPooling2D() (layerA)
         # denlayer = Flatten() (kernel)
