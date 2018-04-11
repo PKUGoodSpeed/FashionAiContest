@@ -48,15 +48,17 @@ class ResNet:
             kernel = MaxPooling2D((2, 2)) (kernel)
             n_filters *= 2
         
+        kernel = Conv2D(512, kernel_size=2) (kernel)
+        kernel = Activation('elu') (BatchNormalization(axis=-1) (kernel))
+        kernel = Dropout(0.25) (kernel)
         print kernel.shape
-        kernel = Dropout(0.1) (kernel)
         denlayer = GlobalAveragePooling2D() (kernel)
         # denlayer = GlobalMaxPooling2D() (layerA)
         # denlayer = Flatten() (kernel)
         
         # adding dense layers
         for kargs in dense_list:
-            denlayer = Dropout(0.68) (Dense(**kargs) (denlayer))
+            denlayer = Dropout(0.64) (Dense(**kargs) (denlayer))
         
         out_layer = Dense(self.output_dim, activation='softmax') (denlayer)
         self.model = Model(inputs=[in_layer], outputs=[out_layer])
