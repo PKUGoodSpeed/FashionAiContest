@@ -27,36 +27,36 @@ class ResNet:
         kernel = BatchNormalization(axis=-1) (Conv2D(filters=n_filters, kernel_size=3, padding="same") (in_layer))
         kernel = Activation('relu') (kernel)
         for _ in range(depth):
-            layerA = Conv2D(filters=2*n_filters, kernel_size=5, padding="same") (kernel)
-            layerB = Conv2D(filters=int(n_filters/2), kernel_size=3, padding="same") (kernel)
+            layerA = Conv2D(filters=2*n_filters, kernel_size=1, padding="same") (kernel)
+            layerB = Conv2D(filters=int(n_filters/2), kernel_size=1, padding="same") (kernel)
             layerB = Activation('relu') (BatchNormalization(axis=-1) (layerB))
             layerB = Conv2D(filters=int(n_filters/2), kernel_size=3, padding="same") (layerB)
             layerB = Activation('relu') (BatchNormalization(axis=-1) (layerB))
-            layerB = Conv2D(filters=2*n_filters, kernel_size=5, padding="same") (layerB)
+            layerB = Conv2D(filters=2*n_filters, kernel_size=1, padding="same") (layerB)
             kernel = merge([layerA, layerB], mode='sum')
             
             for _ in range(res_num):
                 layerB = Activation('relu') (BatchNormalization(axis=-1) (kernel))
-                layerB = Conv2D(filters=int(n_filters/2), kernel_size=3, padding="same") (layerB)
+                layerB = Conv2D(filters=int(n_filters/2), kernel_size=1, padding="same") (layerB)
                 layerB = Activation('relu') (BatchNormalization(axis=-1) (layerB))
                 layerB = Conv2D(filters=int(n_filters/2), kernel_size=3, padding="same") (layerB)
                 layerB = Activation('relu') (BatchNormalization(axis=-1) (layerB))
-                layerB = Conv2D(filters=2*n_filters, kernel_size=5, padding="same") (layerB)
+                layerB = Conv2D(filters=2*n_filters, kernel_size=1, padding="same") (layerB)
                 kernel = merge([kernel, layerB], mode='sum')
             
             kernel = Activation('relu') (BatchNormalization(axis=-1) (kernel))
             kernel = MaxPooling2D((2, 2)) (kernel)
-            kernel = Dropout(0.1) (kernel)
             n_filters *= 2
         
         print kernel.shape
+        kernel = Dropout(0.1) (kernel)
         denlayer = GlobalAveragePooling2D() (kernel)
         # denlayer = GlobalMaxPooling2D() (layerA)
         # denlayer = Flatten() (kernel)
         
         # adding dense layers
         for kargs in dense_list:
-            denlayer = Dropout(0.72) (Dense(**kargs) (denlayer))
+            denlayer = Dropout(0.68) (Dense(**kargs) (denlayer))
         
         out_layer = Dense(self.output_dim, activation='softmax') (denlayer)
         self.model = Model(inputs=[in_layer], outputs=[out_layer])
