@@ -2,9 +2,9 @@ from keras.models import Model
 from keras.layers import Input, Conv2D, Activation, Dropout, Lambda, Dense, BatchNormalization
 from keras.layers import MaxPooling2D, AveragePooling2D, concatenate, Add
 from keras.layers import GlobalMaxPooling2D, GlobalAveragePooling2D, merge, Flatten
-from keras.applications import Xception
+from keras.applications import InceptionV3
 
-class XceptionNet:
+class InceptionNet:
     input_shape = None
     output_dim = None
     model = None
@@ -23,11 +23,11 @@ class XceptionNet:
         in_layer = Input(self.input_shape)
         
         # use keras existing resnet50
-        xceptionModel = Xception(include_top=False, weights='imagenet', 
+        inceptionModel = InceptionV3(include_top=False, weights='imagenet', 
         input_tensor=Input(shape=self.input_shape), pooling="avg")
 
-        kernel = Dropout(0.66) (xceptionModel (in_layer))
-        xceptionModel.summary()
+        kernel = Dropout(0.64) (inceptionModel (in_layer))
+        inceptionModel.summary()
         print kernel.shape
 
         denlayer = kernel
@@ -36,7 +36,7 @@ class XceptionNet:
         
         # adding dense layers
         for kargs in dense_list:
-            denlayer = Dropout(0.72) (Dense(**kargs) (denlayer))
+            denlayer = Dropout(0.68) (Dense(**kargs) (denlayer))
         
         out_layer = Dense(self.output_dim, activation='softmax') (denlayer)
         self.model = Model(inputs=[in_layer], outputs=[out_layer])

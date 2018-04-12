@@ -2,7 +2,9 @@ from keras.models import Model
 from keras.layers import Input, Conv2D, Activation, Dropout, Lambda, Dense, BatchNormalization
 from keras.layers import MaxPooling2D, AveragePooling2D, concatenate, Add
 from keras.layers import GlobalMaxPooling2D, GlobalAveragePooling2D, merge, Flatten
-from keras.applications.resnet50 import ResNet50
+import sys
+sys.path.append('./utils')
+from resnet_utils import CustomizedResNet50
 
 class ResNet:
     input_shape = None
@@ -86,8 +88,8 @@ class KerasResNet:
         '''
         in_layer = Input(self.input_shape)
         
-        # use keras existing resnet50
-        resnetModel = ResNet50(include_top=False, weights='imagenet', input_tensor=Input(shape=self.input_shape))
+        # use customized resnet50
+        resnetModel = CustomizedResNet50(include_top=False, weights='imagenet', input_tensor=Input(shape=self.input_shape))
 
         kernel = resnetModel (in_layer)
         print kernel.shape

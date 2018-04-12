@@ -12,7 +12,6 @@ from dennet import DenseNet
 from naive import NaiveCnnNet, VggNet, Vgg19Net
 from resnet import ResNet, KerasResNet
 from xception import XceptionNet
-from inception import InceptionNet
 
 model_dict = {
     'densenet': DenseNet,
