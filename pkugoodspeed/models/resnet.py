@@ -89,18 +89,20 @@ class KerasResNet:
         in_layer = Input(self.input_shape)
         
         # use customized resnet50
-        resnetModel = CustomizedResNet50(include_top=False, weights='imagenet', input_tensor=Input(shape=self.input_shape))
+        resnetModel = CustomizedResNet50(include_top=False, weights='imagenet', 
+        input_tensor=Input(shape=self.input_shape), pooling="avg")
 
-        kernel = resnetModel (in_layer)
+        kernel = Dropout(0.66) (resnetModel (in_layer))
+        resnetModel.summary()
         print kernel.shape
 
         # denlayer = GlobalAveragePooling2D() (kernel)
         # denlayer = GlobalMaxPooling2D() (layerA)
-        denlayer = Flatten() (kernel)
+        denlayer = kernel
         
         # adding dense layers
         for kargs in dense_list:
-            denlayer = Dropout(0.6) (Dense(**kargs) (denlayer))
+            denlayer = Dropout(0.72) (Dense(**kargs) (denlayer))
         
         out_layer = Dense(self.output_dim, activation='softmax') (denlayer)
         self.model = Model(inputs=[in_layer], outputs=[out_layer])

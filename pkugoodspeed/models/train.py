@@ -35,7 +35,7 @@ class Trainer:
         change_lr = LearningRateScheduler(scheduler)
         
         ## Set early stopper:
-        earlystopper = EarlyStopping(monitor='val_loss', patience=17, verbose=1, mode='auto')
+        earlystopper = EarlyStopping(monitor='val_loss', patience=8, verbose=1, mode='auto')
         
         ## Set Check point
         if not os.path.exists(checker_path):
