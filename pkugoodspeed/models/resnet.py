@@ -102,7 +102,7 @@ class KerasResNet:
         
         # adding dense layers
         for kargs in dense_list:
-            denlayer = Dropout(0.72) (Dense(**kargs) (denlayer))
+            denlayer = Dropout(0.75) (Dense(**kargs) (denlayer))
         
         out_layer = Dense(self.output_dim, activation='softmax') (denlayer)
         self.model = Model(inputs=[in_layer], outputs=[out_layer])
