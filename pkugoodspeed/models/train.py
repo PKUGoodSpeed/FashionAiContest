@@ -28,7 +28,7 @@ class Trainer:
         def scheduler(epoch):
             global global_learning_rate
             global global_decaying_rate
-            if epoch%3 == 0:
+            if epoch%4 == 0:
                 global_learning_rate *= global_decaying_rate
                 print("CURRENT LEARNING RATE = " + str(global_learning_rate))
             return global_learning_rate
@@ -44,7 +44,7 @@ class Trainer:
         checkpointer = ModelCheckpoint(filepath=checker, monitor='val_loss', verbose=1, save_best_only=True, mode='auto')
         
         if valid_set is None:
-            history = self.model.fit(x, y, epochs=epochs, verbose=1, validation_split=0.1, batch_size=16,
+            history = self.model.fit(x, y, epochs=epochs, verbose=1, validation_split=0.05, batch_size=16,
             callbacks=[earlystopper, checkpointer, change_lr])
         else:
             history = self.model.fit(x, y, epochs=epochs, verbose=1, validation_data=valid_set, batch_size=16,
@@ -63,3 +63,8 @@ class Trainer:
         ''' loading the model '''
         print("Loading model from {FILE} ...".format(FILE=model_file))
         self.model.load_weights(model_file)
+    
+    def predict(self, test_x):
+        ''' make predictions '''
+        print(" Making predictions ...")
+        return self.model.predict(test_x)

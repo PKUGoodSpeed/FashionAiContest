@@ -3,7 +3,7 @@ from keras.layers import Input, Conv2D, Activation, Dropout, Lambda, Dense, Batc
 from keras.layers import MaxPooling2D, AveragePooling2D, concatenate, Add
 from keras.layers import GlobalMaxPooling2D, GlobalAveragePooling2D, merge, Flatten
 import sys
-sys.path.append('./utils')
+sys.path.append('/home/zebo/git/myRep/FashionAiContest/pkugoodspeed/models/utils')
 from resnet_utils import CustomizedResNet50
 
 class ResNet:
