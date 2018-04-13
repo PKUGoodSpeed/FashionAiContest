@@ -73,8 +73,13 @@ if __name__ == '__main__':
     df.to_csv(oof_file, index=False)
     
     # Training all
-    all_index = [i for i in range(len(df))]
-    x, y = ip.getbatch(idx=all_index, **C['batch'])
+    n = len(df)
+    n_train = int(n*0.92)
+    all_index = np.random.permutation([i for i in range(n)])
+    train_index = all_index[: n_train]
+    valid_index = all_index[n_train: ]
+    x, y = ip.getbatch(idx=train_index, **C['batch'])
+    valid_x, valid_y = ip.getbatch(idx=valid_index)
     print("Input shape:")
     print(x.shape)
     print("\nOutput shape:")
@@ -83,7 +88,7 @@ if __name__ == '__main__':
     model_obj.buildModel(**C['model_kargs'])
     model = model_obj.getModel()
     trainer = Trainer(model=model, model_name=C['model_name'])
-    trainer.train(x, y, valid_set=None, **C['train_args'])
+    trainer.train(x, y, valid_set=(valid_x, valid_y), **C['train_args'])
     
     C["proc"]["img_path"] = TEST_PATH
     C["proc"]["label_file"] = TEST_LABEL_FILE

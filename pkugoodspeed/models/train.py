@@ -5,6 +5,18 @@ from keras.callbacks import LearningRateScheduler, Callback, EarlyStopping, Mode
 global_learning_rate = 0.01
 global_decaying_rate = 0.92
 
+def _get_class_weights(y, pwr=0.5):
+    ''' Getting class weights '''
+    cls = np.array(y).argmax(axis=-1)
+    n_cls = len(y[0])
+    n_total = len(y)
+    class_weights = {}
+    for i in range(n_cls):
+        n_ele = list(cls).count(i)
+        class_weights[i] = (n_total*1. / n_ele)**pwr
+    print("Generating Class Weights:")
+    print(class_weights)
+
 class Trainer:
     model = None
     model_name = None
@@ -17,7 +29,9 @@ class Trainer:
         '''train the model'''
         # compile the model first
         self.model.compile(optimizer=Adam(0.005), loss='categorical_crossentropy', metrics=['accuracy'])
-        
+
+        class_weights = _get_class_weights(y, pwr=0.5)
+
         global global_learning_rate
         global global_decaying_rate
         ## Setting learning rate explicitly
@@ -35,20 +49,20 @@ class Trainer:
         change_lr = LearningRateScheduler(scheduler)
         
         ## Set early stopper:
-        earlystopper = EarlyStopping(monitor='val_loss', patience=6, verbose=1, mode='auto')
+        earlystopper = EarlyStopping(monitor='val_acc', patience=6, verbose=1, mode='auto')
         
         ## Set Check point
         if not os.path.exists(checker_path):
             os.makedirs(checker_path)
         checker = "{PATH}/{MODEL}.h5".format(PATH=checker_path, MODEL=self.model_name)
-        checkpointer = ModelCheckpoint(filepath=checker, monitor='val_loss', verbose=1, save_best_only=True, mode='auto')
+        checkpointer = ModelCheckpoint(filepath=checker, monitor='val_acc', verbose=1, save_best_only=True, mode='auto')
         
         if valid_set is None:
             history = self.model.fit(x, y, epochs=epochs, verbose=1, validation_split=0.05, batch_size=16,
-            callbacks=[earlystopper, checkpointer, change_lr])
+            class_weight=class_weights, callbacks=[earlystopper, checkpointer, change_lr])
         else:
             history = self.model.fit(x, y, epochs=epochs, verbose=1, validation_data=valid_set, batch_size=16,
-            callbacks=[earlystopper, checkpointer, change_lr])
+            class_weight=class_weights, callbacks=[earlystopper, checkpointer, change_lr])
         return history
     
     def save(self, path):
