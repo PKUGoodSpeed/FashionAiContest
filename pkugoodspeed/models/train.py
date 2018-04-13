@@ -64,9 +64,9 @@ class Trainer:
         print("Loading model from {FILE} ...".format(FILE=model_file))
         self.model.load_weights(model_file)
     
-    def predict(self, test_x):
+    def predict(self, test_x, checker_path='./output/checkpoints'):
         ''' make predictions '''
         print(" Making predictions ...")
-        # checker = "{PATH}/{MODEL}.h5".format(PATH=checker_path, MODEL=self.model_name)
-        # self.load(checker)
+        checker = "{PATH}/{MODEL}.h5".format(PATH=checker_path, MODEL=self.model_name)
+        self.load(checker)
         return self.model.predict(test_x)

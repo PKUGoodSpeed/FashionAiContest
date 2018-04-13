@@ -61,7 +61,7 @@ if __name__ == '__main__':
         model = model_obj.getModel()
         trainer = Trainer(model=model, model_name=C['model_name'])
         res = trainer.train(x, y, valid_set=(valid_x, valid_y), **C['train_args'])
-        fold_prediction = trainer.predict(valid_x)
+        fold_prediction = trainer.predict(valid_x, checker_path=C['train_args']['checker_path'])
         for j, ans in zip(valid_index, fold_prediction):
             oof_pred[j] = _encode(ans)
 
@@ -90,7 +90,7 @@ if __name__ == '__main__':
     ip.getTests(**C["proc"])
     test_x = ip.getTestBatch()
     test_df = ip.getDataFrame()
-    test_df['class'] = trainer.predict(test_x)
+    test_df['class'] = trainer.predict(test_x, checker_path=C['train_args']['checker_path'])
     
     test_file = oof_path + "/{LAB}_test.csv".format(LAB=C["proc"]["category"])
     test_df.to_csv(test_file, index=False)
