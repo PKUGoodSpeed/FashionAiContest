@@ -92,7 +92,7 @@ class KerasResNet:
         resnetModel = CustomizedResNet50(include_top=False, weights='imagenet', 
         input_tensor=Input(shape=self.input_shape), pooling="avg")
 
-        kernel = Dropout(0.66) (resnetModel (in_layer))
+        kernel = Dropout(0.75) (resnetModel (in_layer))
         resnetModel.summary()
         print kernel.shape
 
