@@ -48,6 +48,7 @@ if __name__ == '__main__':
     model_obj = model_dict[C['model_name']](input_shape=ishape, output_dim=odim)
 
 ## Creating OOF
+"""
     kf = KFold(len(df), n_folds=5, random_state=17)
     for i, (train_index, valid_index) in enumerate(kf):
         model_obj.buildModel(**C['model_kargs'])
@@ -71,7 +72,7 @@ if __name__ == '__main__':
         os.makedirs(oof_path)
     oof_file = oof_path + "/{LAB}_oof.csv".format(LAB=C["proc"]["category"])
     df.to_csv(oof_file, index=False)
-    
+"""
     # Training all
     n = len(df)
     n_train = int(n*0.92)
