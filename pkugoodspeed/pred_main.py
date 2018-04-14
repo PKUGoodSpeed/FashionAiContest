@@ -49,8 +49,13 @@ if __name__ == '__main__':
     # Training all
     n = len(df)
     kf = KFold(n, n_folds=10, random_state=17)
-    for train_index, valid_index in kf:
+    train_index = None
+    valid_index = None
+    for t, v in kf:
         print "wtf"
+        train_index = t
+        valid_index = v
+        break
     print len(train_index), len(valid_index)
     x, y = ip.getbatch(idx=train_index, **C['batch'])
     valid_x, valid_y = ip.getbatch(idx=valid_index)
