@@ -48,10 +48,8 @@ if __name__ == '__main__':
     model_obj = model_dict[C['model_name']](input_shape=ishape, output_dim=odim)
     # Training all
     n = len(df)
-    n_train = int(n*0.92)
-    all_index = np.random.permutation([i for i in range(n)])
-    train_index = all_index[: n_train]
-    valid_index = all_index[n_train: ]
+    kf = KFold(n, n_folds=10, random_state=17)
+    train_index, valid_index = kf[0]
     x, y = ip.getbatch(idx=train_index, **C['batch'])
     valid_x, valid_y = ip.getbatch(idx=valid_index)
     print("Input shape:")
