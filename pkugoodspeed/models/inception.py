@@ -26,7 +26,7 @@ class InceptionNet:
         inceptionModel = InceptionV3(include_top=False, weights='imagenet', 
         input_tensor=Input(shape=self.input_shape), pooling="avg")
 
-        kernel = Dropout(0.72) (inceptionModel (in_layer))
+        kernel = Dropout(0.6) (inceptionModel (in_layer))
         inceptionModel.summary()
         print kernel.shape
 
@@ -36,7 +36,7 @@ class InceptionNet:
         
         # adding dense layers
         for kargs in dense_list:
-            denlayer = Dropout(0.75) (Dense(**kargs) (denlayer))
+            denlayer = Dropout(0.6) (Dense(**kargs) (denlayer))
         
         out_layer = Dense(self.output_dim, activation='softmax') (denlayer)
         self.model = Model(inputs=[in_layer], outputs=[out_layer])
