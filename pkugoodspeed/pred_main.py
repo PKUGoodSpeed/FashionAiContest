@@ -49,7 +49,9 @@ if __name__ == '__main__':
     # Training all
     n = len(df)
     kf = KFold(n, n_folds=10, random_state=17)
-    train_index, valid_index = kf[0]
+    for train_index, valid_index in kf:
+        print "wtf"
+    print len(train_index), len(valid_index)
     x, y = ip.getbatch(idx=train_index, **C['batch'])
     valid_x, valid_y = ip.getbatch(idx=valid_index)
     print("Input shape:")
