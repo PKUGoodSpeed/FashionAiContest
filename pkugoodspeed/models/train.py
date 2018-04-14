@@ -85,3 +85,7 @@ class Trainer:
         checker = "{PATH}/{MODEL}.h5".format(PATH=checker_path, MODEL=self.model_name)
         self.load(checker)
         return self.model.predict(test_x)
+
+    def getModel(self):
+        ''' Get the trained model.'''
+        return self.model
