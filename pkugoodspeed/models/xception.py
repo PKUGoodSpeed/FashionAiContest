@@ -26,7 +26,7 @@ class XceptionNet:
         xceptionModel = Xception(include_top=False, weights='imagenet', 
         input_tensor=Input(shape=self.input_shape), pooling="avg")
 
-        kernel = Dropout(0.66) (xceptionModel (in_layer))
+        kernel = Dropout(0.75) (xceptionModel (in_layer))
         xceptionModel.summary()
         print kernel.shape
 

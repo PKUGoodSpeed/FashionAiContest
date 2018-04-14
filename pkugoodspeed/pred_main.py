@@ -75,7 +75,8 @@ if __name__ == '__main__':
     test_x = ip.getTestBatch()
     test_df = ip.getDataFrame()
     test_df['class'] = trainer.predict(test_x, checker_path=C['train_args']['checker_path'])
-    
+
+    oof_path = './output/' + C['model_name']
     test_file = oof_path + "/{LAB}_test.csv".format(LAB=C["proc"]["category"])
     test_df.to_csv(test_file, index=False)
     
