@@ -1,4 +1,5 @@
 import os
+import numpy as np
 from keras.optimizers import SGD, Adam, Adadelta, RMSprop, Adagrad
 from keras.callbacks import LearningRateScheduler, Callback, EarlyStopping, ModelCheckpoint
 
