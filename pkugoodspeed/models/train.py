@@ -26,11 +26,16 @@ class Trainer:
         self.model = model
         self.model_name = model_name
     
-    def train(self, x, y, valid_set=None, learning_rate=0.02, decaying_rate=0.9, epochs=10, checker_path='../output/checkpoints'):
+    def train(self, x, y, valid_set=None, learning_rate=0.02, decaying_rate=0.9, epochs=10, 
+    checker_path='../output/checkpoints', resume=False):
         '''train the model'''
         # compile the model first
         self.model.compile(optimizer=Adam(0.005), loss='categorical_crossentropy', metrics=['accuracy'])
 
+        if resume:
+            checker = "{PATH}/{MODEL}.h5".format(PATH=checker_path, MODEL=self.model_name)
+            print("Loading model from {FILE} ...".format(FILE=checker))
+            self.model.load_weights(checker)
         class_weights = _get_class_weights(y, pwr=0.5)
 
         global global_learning_rate
