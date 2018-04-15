@@ -60,6 +60,7 @@ if __name__ == '__main__':
     print len(train_index), len(valid_index)
     x, y = ip.getbatch(idx=train_index, **C['batch'])
     valid_x, valid_y = ip.getbatch(idx=valid_index)
+    ip._imgs = None
     print("Input shape:")
     print(x.shape)
     print("\nOutput shape:")
