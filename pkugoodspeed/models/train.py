@@ -6,7 +6,7 @@ from keras.callbacks import LearningRateScheduler, Callback, EarlyStopping, Mode
 global_learning_rate = 0.01
 global_decaying_rate = 0.92
 
-def _get_class_weights(y, pwr=0.5):
+def _get_class_weights(y, pwr=0.4):
     ''' Getting class weights '''
     cls = np.array(y).argmax(axis=-1)
     n_cls = len(y[0])
