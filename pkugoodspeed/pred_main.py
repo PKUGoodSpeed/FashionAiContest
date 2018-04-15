@@ -69,7 +69,7 @@ if __name__ == '__main__':
     model_obj.buildModel(**C['model_kargs'])
     model = model_obj.getModel()
     trainer = Trainer(model=model, model_name=C['model_name'])
-    trainer.train(x, y, valid_set=(valid_x, valid_y), **C['train_args'])
+    trainer.train(x, y, valid_set=(valid_x, valid_y), **C['train_args'], resume=True)
     
     oof_path = './output/' + C['model_name']
     if not os.path.exists(oof_path):
