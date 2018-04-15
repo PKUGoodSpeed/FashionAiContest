@@ -36,7 +36,7 @@ class Trainer:
             checker = "{PATH}/{MODEL}.h5".format(PATH=checker_path, MODEL=self.model_name)
             print("Loading model from {FILE} ...".format(FILE=checker))
             self.model.load_weights(checker)
-        class_weights = _get_class_weights(y, pwr=0.5)
+        class_weights = _get_class_weights(y, pwr=0.44)
 
         global global_learning_rate
         global global_decaying_rate
