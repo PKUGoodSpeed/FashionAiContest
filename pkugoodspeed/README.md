@@ -34,3 +34,9 @@ python pred_main.py --c configs/xception.cfg
 ```
 Using different config files for different models. (`kerasresnet` is using resnet50 by simply modify the implementation by keras,
  `resnet` is the resnet constructed by myself, but does not work well.)
+ 
+ 
+ 
+ ### Current Resuls:
+ 
+ | models | resnet50 | inception | xception
