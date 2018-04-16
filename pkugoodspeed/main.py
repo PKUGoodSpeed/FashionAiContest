@@ -9,15 +9,20 @@ from opts_parser import getopts
 from process import ImagePrec
 from train import Trainer
 from dennet import DenseNet
-from naive import NaiveCnnNet, VggNet
+from naive import NaiveCnnNet, VggNet, Vgg19Net
 from resnet import ResNet, KerasResNet
+from xception import XceptionNet
+from inception import InceptionNet
 
 model_dict = {
     'densenet': DenseNet,
     'naive': NaiveCnnNet,
     'vgg': VggNet,
     'resnet': ResNet,
-    'kerasresnet': KerasResNet
+    'kerasresnet': KerasResNet,
+    'vgg19': Vgg19Net,
+    'xception': XceptionNet,
+    'inception': InceptionNet
 }
 
 if __name__ == '__main__':

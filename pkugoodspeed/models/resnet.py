@@ -2,7 +2,9 @@ from keras.models import Model
 from keras.layers import Input, Conv2D, Activation, Dropout, Lambda, Dense, BatchNormalization
 from keras.layers import MaxPooling2D, AveragePooling2D, concatenate, Add
 from keras.layers import GlobalMaxPooling2D, GlobalAveragePooling2D, merge, Flatten
-from keras.applications.resnet50 import ResNet50
+import sys
+sys.path.append('/home/zebo/git/myRep/FashionAiContest/pkugoodspeed/models/utils')
+from resnet_utils import CustomizedResNet50
 
 class ResNet:
     input_shape = None
@@ -86,19 +88,21 @@ class KerasResNet:
         '''
         in_layer = Input(self.input_shape)
         
-        # use keras existing resnet50
-        resnetModel = ResNet50(include_top=False, weights='imagenet', input_tensor=Input(shape=self.input_shape))
+        # use customized resnet50
+        resnetModel = CustomizedResNet50(include_top=False, weights='imagenet', 
+        input_tensor=Input(shape=self.input_shape), pooling="avg")
 
-        kernel = resnetModel (in_layer)
+        kernel = Dropout(0.75) (resnetModel (in_layer))
+        resnetModel.summary()
         print kernel.shape
 
         # denlayer = GlobalAveragePooling2D() (kernel)
         # denlayer = GlobalMaxPooling2D() (layerA)
-        denlayer = Flatten() (kernel)
+        denlayer = kernel
         
         # adding dense layers
         for kargs in dense_list:
-            denlayer = Dropout(0.6) (Dense(**kargs) (denlayer))
+            denlayer = Dropout(0.75) (Dense(**kargs) (denlayer))
         
         out_layer = Dense(self.output_dim, activation='softmax') (denlayer)
         self.model = Model(inputs=[in_layer], outputs=[out_layer])
