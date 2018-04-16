@@ -11,5 +11,7 @@ Run `python3 train_fasion.py` with arguments.
 --training_batch_size 64
 --test_percentage 0.05
 --learning_rate 0.00005
+--validation_every_X_batch 5
+--memory_safe (1 or 0)
 ```
 
