@@ -40,7 +40,7 @@ class Validation(Callback):
 
 class Trainer:
 
-    def __init__(self, train_class_name=None, training_batch_size=100, existing_weight=None, test_percentage=0.02, learning_rate=0.0002, save_every_x_epoch=5, number_of_training_sample=sys.maxsize, fine_tuning_model=None, memory_safe=False, validate=True):
+    def __init__(self, train_class_name=None, training_batch_size=100, existing_weight=None, test_percentage=0.02, learning_rate=0.0002, memory_safe=False):
 
         if train_class_name == None:
             print("You must specify train_class_name")
@@ -48,13 +48,10 @@ class Trainer:
 
         self.Y = []
 
-        self.model_file = "{date:%Y-%m-%d %H:%M:%S}-".format( date=datetime.datetime.now())
+        self.model_file = "{date:%Y-%m-%d %H:%M:%S}".format( date=datetime.datetime.now())
         print("model_folder: ", self.model_file)
 
-        self.save_every_x_epoch = save_every_x_epoch
-        self.validate = validate
         self.memory_safe = memory_safe
-        self.number_of_sample = number_of_training_sample
         self.train_class_name = train_class_name
         if not os.path.exists(os.path.join("models", train_class_name)):
             os.makedirs(os.path.join("models", train_class_name))
@@ -81,14 +78,9 @@ class Trainer:
         # Start construction of the Keras Sequential model.
         input_tensor = Input(shape=self.img_shape_full)
         base_model = Xception(input_tensor=input_tensor, weights='imagenet', include_top=False, classes=self.num_classes)
-
-
         x = base_model.output
         x = GlobalAveragePooling2D()(x)
         model = Dropout(0.2)(x)
-        # let's add a fully-connected layer
-        # x = Dense(512, activation='relu')(x)
-        # and a logistic layer -- let's say we have 200 classes
         predictions = Dense(self.num_classes, activation='softmax')(x)
 
         # this is the model we will train
