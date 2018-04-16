@@ -35,3 +35,6 @@ feats/
 # Executables
 apps/
 *.exe
+
+runFinetuneImagenet/models/*
+runFinetuneImagenet/base/*
