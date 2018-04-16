@@ -1,8 +1,8 @@
 # setup
 
-load fill the /base dir with the data
+Fill `/base` dir with the data.
 
-run `python3 train_fasion.py` with arguments
+Run `python3 train_fasion.py` with arguments.
 
 # arguments
 
