@@ -23,7 +23,7 @@ plt.switch_backend('agg')
 def _str2cls(s):
     ''' Converting the labeling string into one hot classes '''
     cls = np.array([c for c in s])
-    prob = 1.*(cls == 'y').astype(np.float32) + 0.5*(cls == 'm').astype(np.float32)
+    prob = 1.*(cls == 'y').astype(np.float32)
     assert prob.sum() >= 1., "The {STRING} is not a valid label.".format(STRING=s)
     return prob / prob.sum()
 
