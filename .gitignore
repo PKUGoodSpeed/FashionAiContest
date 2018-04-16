@@ -28,7 +28,6 @@ __pycache__/
 25000/
 .ipyno_launch/
 
-
 # For other big data file
 *.csv
 feats/

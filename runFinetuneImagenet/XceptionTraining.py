@@ -115,6 +115,7 @@ class Trainer:
             test_count = int(test_percentage * len(all_class_samples))
             index = 0
             print("Training " + train_class_name + " with: " + str(int((1 - test_percentage) * len(all_class_samples))) + ", Testing with: " + str(test_count), str(self.num_classes), "Classes")
+            print("Loading images...")
             for row in all_class_samples:
                 image = Image.open("base/" + row[0])
                 img_array = np.asarray(image)
@@ -123,7 +124,7 @@ class Trainer:
                     img_array = np.asarray(image)
                 self.X[index] = img_array
                 self.Y.append(row[2].index("y"))
-                if index % 1000 == 0:
+                if index % 500 == 0:
                     print(index)
                 index += 1
 
