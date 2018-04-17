@@ -12,6 +12,9 @@ from keras.callbacks import Callback
 from keras import optimizers
 from sklearn.metrics import classification_report
 from keras.applications.xception import Xception
+from keras.applications.mobilenet import MobileNet
+from keras.applications.densenet import DenseNet121
+
 from keras.callbacks import ModelCheckpoint
 from sklearn.model_selection import train_test_split
 
@@ -32,7 +35,7 @@ class Validation(Callback):
         self.y_test = y_test
 
     def on_batch_end(self, batch, logs={}):
-        if self.batch % self.N == 0:
+        if self.batch % self.N == 0 and self.N != 0:
             y_prob = self.model.predict(self.X_test)
             y_classes = y_prob.argmax(axis=-1)
             print(classification_report(self.y_test, to_categorical(y_classes, num_classes=self.num_classes)))
@@ -40,13 +43,16 @@ class Validation(Callback):
 
 class Trainer:
 
-    def __init__(self, train_class_name=None, training_batch_size=100, existing_weight=None, test_percentage=0.02, learning_rate=0.0002):
+    def __init__(self, model_name="Xception", train_class_name=None, training_batch_size=100, existing_weight=None, test_percentage=0.02, learning_rate=0.000, validation_every_X_batch=5):
 
         if train_class_name == None:
             print("You must specify train_class_name")
             return
 
-        self.model_file = "{date:%Y-%m-%d %H:%M:%S}".format( date=datetime.datetime.now())
+        self.validation_every_X_batch = validation_every_X_batch
+        self.Y = []
+
+        self.model_file = model_name + "{date:%Y-%m-%d-%H-%M-%S}".format( date=datetime.datetime.now())
         print("model_folder: ", self.model_file)
 
         self.train_class_name = train_class_name
@@ -57,7 +63,7 @@ class Trainer:
 
         # We know that MNIST images are 28 pixels in each dimension.
         img_size = 512
-        self.img_size = img_size
+
         self.img_size_flat = img_size * img_size * 3
 
         self.img_shape_full = (img_size, img_size, 3)
@@ -74,7 +80,14 @@ class Trainer:
 
         # Start construction of the Keras Sequential model.
         input_tensor = Input(shape=self.img_shape_full)
-        base_model = Xception(input_tensor=input_tensor, weights='imagenet', include_top=False, classes=self.num_classes)
+        if model_name == "Xception":
+            base_model = Xception(input_tensor=input_tensor, weights='imagenet', include_top=False, classes=self.num_classes)
+        elif model_name == "MobileNet":
+            base_model = MobileNet(input_tensor=input_tensor, weights='imagenet', include_top=False, classes=self.num_classes)
+        elif model_name == "DenseNet121":
+            base_model = DenseNet121(input_tensor=input_tensor, weights='imagenet', include_top=False, classes=self.num_classes)
+
+
         x = base_model.output
         x = GlobalAveragePooling2D()(x)
         model = Dropout(0.2)(x)
@@ -99,64 +112,43 @@ class Trainer:
                     continue
                 all_class_samples.append(row)
 
-            self.Y = []
-            self.X = []
+            self.X = np.zeros((len(all_class_samples), img_size, img_size, 3))
+            # self.X = np.zeros((10, img_size, img_size, 3))
             test_count = int(test_percentage * len(all_class_samples))
+            index = 0
             print("Training " + train_class_name + " with: " + str(int((1 - test_percentage) * len(all_class_samples))) + ", Testing with: " + str(test_count), str(self.num_classes), "Classes")
             print("Loading images...")
             for row in all_class_samples:
-                self.X.append(row[0])
+                image = Image.open("base/" + row[0])
+                img_array = np.asarray(image)
+                if img_array.shape != self.img_shape_full:
+                    image = image.resize((img_size, img_size), Image.ANTIALIAS)
+                    img_array = np.asarray(image)
+                self.X[index] = img_array
                 self.Y.append(row[2].index("y"))
+                if index % 500 == 0:
+                    print(index)
+                index += 1
 
         self.Y = to_categorical(self.Y, num_classes=self.num_classes)
-        self.X = np.array(self.X)
 
         self.X_train, self.X_test, self.y_train, self.y_test = train_test_split(self.X, self.Y, test_size = test_percentage, random_state=42)
+        del self.X
         class_weight = {}
         class_count = np.sum(self.y_train, axis=0)
         print("Training Sample for each Class", class_count)
         for class_index in range(self.num_classes):
-            class_weight[class_index] = 1 / class_count[class_index] * len(all_class_samples) / self.num_classes
+            class_weight[class_index] = 1 /(class_count[class_index] / np.sum(class_count)) / self.num_classes
         self.class_weight = class_weight
         print("Class weights: ", self.class_weight)
         os.makedirs(os.path.join("models", train_class_name, self.model_file))
         model.save(os.path.join("models", train_class_name, self.model_file, train_class_name + "_" + "model.h5"))
 
-        self.X_T = []
-        for index in range(self.X_test.shape[0]):
-            image = Image.open("base/" + self.X_train[index])
-            img_array = np.asarray(image)
-            if img_array.shape != self.img_shape_full:
-                image = image.resize((img_size, img_size), Image.ANTIALIAS)
-                img_array = np.asarray(image)
-            self.X_T.append(img_array)
-        self.X_T = np.array(self.X_T)
-
-    def train(self, epochs=100):
+    def train(self, steps_per_epoch=10, epochs=100):
         checkpoint = ModelCheckpoint(os.path.join("models", self.train_class_name, self.model_file, "weights.hdf5"), monitor='val_acc', verbose=1, save_best_only=True, mode='max')
-        self.model.fit_generator(self.generate_arrays_from(), max_queue_size=2, steps_per_epoch=int(self.X_train.shape[0] / self.training_batch_size), class_weight=self.class_weight, epochs=epochs, callbacks=[Validation(self.model, 5, self.num_classes, self.X_T, self.y_test), checkpoint])
+        self.model.fit(self.X_train, self.y_train, class_weight=self.class_weight, batch_size=self.training_batch_size, epochs=epochs, validation_data=(self.X_test, self.y_test), callbacks=[checkpoint, Validation(self.model, self.validation_every_X_batch, self.num_classes, self.X_test, self.y_test)])
 
-    def generate_arrays_from(self):
-        Y = []
-        X = []
-        while 1:
-            for index in range(self.X_train.shape[0]):
-                image = Image.open("base/" + self.X_train[index])
-                img_array = np.asarray(image)
-                if img_array.shape != self.img_shape_full:
-                    image = image.resize((self.img_size, self.img_size), Image.ANTIALIAS)
-                    img_array = np.asarray(image)
 
-                X.append(img_array)
-                Y.append(self.y_train[index])
 
-                if index % self.training_batch_size == 0:
-                    x, y = np.array(X) / 255, np.array(Y)
-                    yield (x, y)
-                    Y = []
-                    X = []
-            if len(X) > 0:
-                x, y = np.array(X) / 255, np.array(Y)
-                yield (x, y)
-                Y = []
-                X = []
+
+
