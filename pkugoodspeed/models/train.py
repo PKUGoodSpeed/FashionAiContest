@@ -14,7 +14,7 @@ def _get_class_weights(y, pwr=0.4):
     class_weights = {}
     for i in range(n_cls):
         n_ele = list(cls).count(i)
-        class_weights[i] = (n_total*1. / n_ele)**pwr
+        class_weights[i] = (n_total*1. / (n_ele+2.))**pwr
     print("Generating Class Weights:")
     print(class_weights)
 
@@ -36,7 +36,7 @@ class Trainer:
             checker = "{PATH}/{MODEL}.h5".format(PATH=checker_path, MODEL=self.model_name)
             print("Loading model from {FILE} ...".format(FILE=checker))
             self.model.load_weights(checker)
-        class_weights = _get_class_weights(y, pwr=0.44)
+        class_weights = _get_class_weights(y, pwr=0.3)
 
         global global_learning_rate
         global global_decaying_rate
