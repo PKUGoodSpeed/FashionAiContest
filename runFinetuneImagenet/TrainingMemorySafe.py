@@ -11,9 +11,6 @@ from keras.utils.np_utils import to_categorical
 from keras.callbacks import Callback
 from keras import optimizers
 from sklearn.metrics import classification_report
-from keras.applications.xception import Xception
-from keras.applications.mobilenet import MobileNet
-from keras.applications.densenet import DenseNet121
 
 from keras.callbacks import ModelCheckpoint
 from sklearn.model_selection import train_test_split
@@ -51,7 +48,7 @@ class Trainer:
 
         self.save_frequency = saving_frequency
         self.validation_every_X_batch = validation_every_X_batch
-        self.model_file = "{date:%Y-%m-%d-%H-%M-%S}".format( date=datetime.datetime.now())
+        self.model_file = model_name + "{date:%Y-%m-%d-%H-%M-%S}".format( date=datetime.datetime.now())
         print("model_folder: ", self.model_file)
 
         self.train_class_name = train_class_name
@@ -81,11 +78,21 @@ class Trainer:
         input_tensor = Input(shape=self.img_shape_full)
 
         if model_name == "Xception":
-            base_model = Xception(input_tensor=input_tensor, weights='imagenet', include_top=False, classes=self.num_classes)
-        elif model_name == "MobileNet":
-            base_model = MobileNet(input_tensor=input_tensor, weights='imagenet', include_top=False, classes=self.num_classes)
+            base_model = xception.Xception(input_tensor=input_tensor, weights='imagenet', include_top=False, classes=self.num_classes)
+        elif model_name == "VGG16":
+            base_model = vgg16.VGG16(input_tensor=input_tensor, weights='imagenet', include_top=False, classes=self.num_classes)
+        elif model_name == "VGG19":
+            base_model = vgg19.VGG19(input_tensor=input_tensor, weights='imagenet', include_top=False, classes=self.num_classes)
         elif model_name == "DenseNet121":
-            base_model = DenseNet121(input_tensor=input_tensor, weights='imagenet', include_top=False, classes=self.num_classes)
+            base_model = densenet.DenseNet121(input_tensor=input_tensor, weights='imagenet', include_top=False, classes=self.num_classes)
+        elif model_name == "DenseNet201":
+            base_model = densenet.DenseNet201(input_tensor=input_tensor, weights='imagenet', include_top=False, classes=self.num_classes)
+        elif model_name == "ResNet50":
+            base_model = resnet50.ResNet50(input_tensor=input_tensor, weights='imagenet', include_top=False, classes=self.num_classes)
+        elif model_name == "InceptionV3":
+            base_model = inception_v3.InceptionV3(input_tensor=input_tensor, weights='imagenet', include_top=False, classes=self.num_classes)            
+        elif model_name == "InceptionResNetV2":
+            base_model = inception_resnet_v2.InceptionResNetV2(input_tensor=input_tensor, weights='imagenet', include_top=False, classes=self.num_classes)
 
         x = base_model.output
         x = GlobalAveragePooling2D()(x)
@@ -101,7 +108,6 @@ class Trainer:
         self.optimizer = optimizers.Adam(lr=learning_rate)
 
         model.compile(optimizer=self.optimizer, loss='categorical_crossentropy', metrics=['accuracy'])
-
 
         with open('base/Annotations/label.csv', 'r') as csvfile:
             reader = csv.reader(csvfile)
@@ -140,8 +146,8 @@ class Trainer:
             img_array = np.asarray(image)
             if img_array.shape != self.img_shape_full:
                 image = image.resize((img_size, img_size), Image.ANTIALIAS)
-                img_array = np.asarray(image) / 255
-            self.X_T.append(img_array)
+                img_array = np.asarray(image)
+            self.X_T.append(img_array / 255)
         self.X_T = np.array(self.X_T)
 
     def train(self, epochs=100):

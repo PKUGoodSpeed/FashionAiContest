@@ -7,6 +7,7 @@ Run `python3 train_fasion.py` with arguments.
 # arguments
 
 ```
+--model_name Xception # all options: Xception, VGG16, VGG19, DenseNet121, DenseNet201, ResNet50, InceptionV3, InceptionResNetV2
 --train_class_name sleeve_length_labels
 --training_batch_size 64
 --test_percentage 0.05
