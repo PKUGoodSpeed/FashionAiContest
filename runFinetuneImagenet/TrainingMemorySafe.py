@@ -26,17 +26,17 @@ class Validation(Callback):
     def __init__(self, model, N, num_classes, X_test, y_test):
         self.model = model
         self.N = N
-        self.batch = 0
+        self.epoch = 0
         self.num_classes = num_classes
         self.X_test = X_test
         self.y_test = y_test
 
-    def on_batch_end(self, batch, logs={}):
-        if self.batch % self.N == 0 and self.N != 0:
+    def on_epoch_end(self, epoch, logs={}):
+        if self.epoch % self.N == 0 and self.N != 0:
             y_prob = self.model.predict(self.X_test)
             y_classes = y_prob.argmax(axis=-1)
             print(classification_report(self.y_test, to_categorical(y_classes, num_classes=self.num_classes)))
-        self.batch += 1
+        self.epoch += 1
 
 class Trainer:
 
@@ -152,7 +152,7 @@ class Trainer:
 
     def train(self, epochs=100):
         checkpoint = ModelCheckpoint(os.path.join("models", self.train_class_name, self.model_file, "weights.hdf5"), monitor='val_loss', verbose=1, save_best_only=True, mode='max')
-        self.model.fit_generator(self.generate_arrays_from(), max_queue_size=2, steps_per_epoch=int(self.X_train.shape[0] / self.training_batch_size * self.save_frequency), class_weight=self.class_weight, epochs=epochs, validation_data=(self.X_T, self.y_test), callbacks=[Validation(self.model, self.validation_every_X_batch, self.num_classes, self.X_T, self.y_test), checkpoint])
+        self.model.fit_generator(self.generate_arrays_from(), max_queue_size=2, steps_per_epoch=int(self.X_train.shape[0] / self.training_batch_size * self.save_frequency), epochs=epochs, validation_data=(self.X_T, self.y_test), callbacks=[Validation(self.model, self.validation_every_X_batch, self.num_classes, self.X_T, self.y_test), checkpoint])
 
     def generate_arrays_from(self):
         Y = []
