@@ -21,5 +21,5 @@ if int(args.memory_safe) == 0:
 	trainer = T.Trainer(model_name=args.model_name, train_class_name=args.train_class_name, training_batch_size=int(args.training_batch_size), learning_rate=float(args.learning_rate), test_percentage=float(args.test_percentage), validation_every_X_batch=int(args.validation_every_X_batch))
 	trainer.train(steps_per_epoch=64, epochs=5000)
 else:
-	trainer = TMS.Trainer(train_class_name=args.train_class_name, training_batch_size=int(args.training_batch_size), learning_rate=float(args.learning_rate), test_percentage=float(args.test_percentage))
+	trainer = TMS.Trainer(train_class_name=args.train_class_name, training_batch_size=int(args.training_batch_size), learning_rate=float(args.learning_rate), test_percentage=float(args.test_percentage), validation_every_X_batch=int(args.validation_every_X_batch))
 	trainer.train(epochs=5000)

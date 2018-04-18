@@ -12,6 +12,9 @@ from keras.callbacks import Callback
 from keras import optimizers
 from sklearn.metrics import classification_report
 from keras.applications.xception import Xception
+from keras.applications.mobilenet import MobileNet
+from keras.applications.densenet import DenseNet121
+
 from keras.callbacks import ModelCheckpoint
 from sklearn.model_selection import train_test_split
 
@@ -40,12 +43,13 @@ class Validation(Callback):
 
 class Trainer:
 
-    def __init__(self, train_class_name=None, training_batch_size=100, existing_weight=None, test_percentage=0.02, learning_rate=0.0002):
+    def __init__(self, model_name="Xception", train_class_name=None, training_batch_size=100, existing_weight=None, test_percentage=0.02, learning_rate=0.0002, validation_every_X_batch=5):
 
         if train_class_name == None:
             print("You must specify train_class_name")
             return
 
+        self.validation_every_X_batch = validation_every_X_batch
         self.model_file = "{date:%Y-%m-%d %H:%M:%S}".format( date=datetime.datetime.now())
         print("model_folder: ", self.model_file)
 
@@ -74,7 +78,14 @@ class Trainer:
 
         # Start construction of the Keras Sequential model.
         input_tensor = Input(shape=self.img_shape_full)
-        base_model = Xception(input_tensor=input_tensor, weights='imagenet', include_top=False, classes=self.num_classes)
+
+        if model_name == "Xception":
+            base_model = Xception(input_tensor=input_tensor, weights='imagenet', include_top=False, classes=self.num_classes)
+        elif model_name == "MobileNet":
+            base_model = MobileNet(input_tensor=input_tensor, weights='imagenet', include_top=False, classes=self.num_classes)
+        elif model_name == "DenseNet121":
+            base_model = DenseNet121(input_tensor=input_tensor, weights='imagenet', include_top=False, classes=self.num_classes)
+
         x = base_model.output
         x = GlobalAveragePooling2D()(x)
         model = Dropout(0.2)(x)
@@ -134,7 +145,7 @@ class Trainer:
 
     def train(self, epochs=100):
         checkpoint = ModelCheckpoint(os.path.join("models", self.train_class_name, self.model_file, "weights.hdf5"), monitor='val_acc', verbose=1, save_best_only=True, mode='max')
-        self.model.fit_generator(self.generate_arrays_from(), max_queue_size=2, steps_per_epoch=int(self.X_train.shape[0] / self.training_batch_size), class_weight=self.class_weight, epochs=epochs, callbacks=[Validation(self.model, 5, self.num_classes, self.X_T, self.y_test), checkpoint])
+        self.model.fit_generator(self.generate_arrays_from(), max_queue_size=2, steps_per_epoch=int(self.X_train.shape[0] / self.training_batch_size), class_weight=self.class_weight, epochs=epochs, callbacks=[Validation(self.model, self.validation_every_X_batch, self.num_classes, self.X_T, self.y_test), checkpoint])
 
     def generate_arrays_from(self):
         Y = []
