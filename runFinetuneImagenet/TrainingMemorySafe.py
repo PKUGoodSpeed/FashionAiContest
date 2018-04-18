@@ -48,7 +48,7 @@ class Trainer:
 
         self.save_frequency = saving_frequency
         self.validation_every_X_batch = validation_every_X_batch
-        self.model_file = model_name + "{date:%Y-%m-%d-%H-%M-%S}".format( date=datetime.datetime.now())
+        self.model_file = model_name + "-{date:%Y-%m-%d-%H-%M-%S}".format( date=datetime.datetime.now())
         print("model_folder: ", self.model_file)
 
         self.train_class_name = train_class_name
