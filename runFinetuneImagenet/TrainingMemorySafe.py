@@ -3,6 +3,7 @@ import csv, os, sys
 from PIL import Image
 import datetime
 
+from keras.utils import multi_gpu_model
 from keras.models import Sequential
 from keras.layers import InputLayer, Input
 from keras.layers import Reshape, MaxPooling2D
@@ -40,7 +41,7 @@ class Validation(Callback):
 
 class Trainer:
 
-    def __init__(self, model_name="Xception", train_class_name=None, training_batch_size=100, existing_weight=None, test_percentage=0.02, learning_rate=0.0001, validation_every_X_batch=5, saving_frequency=1):
+    def __init__(self, model_name="Xception", train_class_name=None, training_batch_size=100, existing_weight=None, test_percentage=0.02, learning_rate=0.0001, validation_every_X_batch=5, saving_frequency=1, gpu_num=1):
 
         if train_class_name == None:
             print("You must specify train_class_name")
@@ -101,7 +102,8 @@ class Trainer:
 
         # this is the model we will train
         model = Model(inputs=base_model.input, outputs=predictions)
-
+        if gpu_num > 1:
+            model = multi_gpu_model(model, gpus=gpu_num)
         self.model = model
         print(model.summary())
 
@@ -152,7 +154,7 @@ class Trainer:
 
     def train(self, epochs=100):
         checkpoint = ModelCheckpoint(os.path.join("models", self.train_class_name, self.model_file, "weights.hdf5"), monitor='val_loss', verbose=1, save_best_only=True, mode='min')
-        self.model.fit_generator(self.generate_arrays_from(), max_queue_size=2, steps_per_epoch=int(self.X_train.shape[0] / self.training_batch_size * self.save_frequency), epochs=epochs, validation_data=(self.X_T, self.y_test), callbacks=[Validation(self.model, self.validation_every_X_batch, self.num_classes, self.X_T, self.y_test), checkpoint])
+        self.model.fit_generator(self.generate_arrays_from(), max_queue_size=2, class_weight=self.class_weight, steps_per_epoch=int(self.X_train.shape[0] / self.training_batch_size * self.save_frequency), epochs=epochs, validation_data=(self.X_T, self.y_test), callbacks=[Validation(self.model, self.validation_every_X_batch, self.num_classes, self.X_T, self.y_test), checkpoint])
 
     def generate_arrays_from(self):
         Y = []
