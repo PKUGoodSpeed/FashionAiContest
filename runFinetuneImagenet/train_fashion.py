@@ -12,6 +12,7 @@ parser.add_argument('--learning_rate', default=0.00005)
 parser.add_argument('--test_percentage', default=0.05)
 parser.add_argument('--memory_safe', default=0)
 parser.add_argument('--validation_every_X_batch', default=5)
+parser.add_argument('--saving_frequency', default=1)
 
 args = parser.parse_args()
 
@@ -21,5 +22,5 @@ if int(args.memory_safe) == 0:
 	trainer = T.Trainer(model_name=args.model_name, train_class_name=args.train_class_name, training_batch_size=int(args.training_batch_size), learning_rate=float(args.learning_rate), test_percentage=float(args.test_percentage), validation_every_X_batch=int(args.validation_every_X_batch))
 	trainer.train(steps_per_epoch=64, epochs=5000)
 else:
-	trainer = TMS.Trainer(train_class_name=args.train_class_name, training_batch_size=int(args.training_batch_size), learning_rate=float(args.learning_rate), test_percentage=float(args.test_percentage), validation_every_X_batch=int(args.validation_every_X_batch))
+	trainer = TMS.Trainer(train_class_name=args.train_class_name, training_batch_size=int(args.training_batch_size), learning_rate=float(args.learning_rate), test_percentage=float(args.test_percentage), validation_every_X_batch=int(args.validation_every_X_batch), saving_frequency=float(args.saving_frequency))
 	trainer.train(epochs=5000)
