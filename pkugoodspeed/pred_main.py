@@ -5,6 +5,7 @@ import pandas as pd
 import pickle
 # Using K-fold for stacking
 from sklearn.cross_validation import KFold
+from sklearn.model_selection import train_test_split
 
 sys.path.append('../utils')
 sys.path.append('./models')
@@ -49,14 +50,8 @@ if __name__ == '__main__':
     model_obj = model_dict[C['model_name']](input_shape=ishape, output_dim=odim)
     # Training all
     n = len(df)
-    kf = KFold(n, n_folds=10, random_state=16)
-    train_index = None
-    valid_index = None
-    for t, v in kf:
-        print "wtf"
-        train_index = t
-        valid_index = v
-        break
+    all_idx = np.array([i for i in range(n)])
+    train_index, valid_index = train_test_split(all_idx, test_size=0.05, random_state=42)
     print len(train_index), len(valid_index)
     x, y = ip.getbatch(idx=train_index, **C['batch'])
     valid_x, valid_y = ip.getbatch(idx=valid_index)
@@ -69,7 +64,7 @@ if __name__ == '__main__':
     model_obj.buildModel(**C['model_kargs'])
     model = model_obj.getModel()
     trainer = Trainer(model=model, model_name=C['model_name'])
-    trainer.train(x, y, valid_set=(valid_x, valid_y), resume=True, **C['train_args'])
+    trainer.train(x, y, valid_set=(valid_x, valid_y), resume=False, **C['train_args'])
     
     oof_path = './output/' + C['model_name']
     if not os.path.exists(oof_path):

@@ -92,7 +92,7 @@ class KerasResNet:
         resnetModel = CustomizedResNet50(include_top=False, weights='imagenet', 
         input_tensor=Input(shape=self.input_shape), pooling="avg")
 
-        kernel = Dropout(0.75) (resnetModel (in_layer))
+        kernel = Dropout(0.5) (resnetModel (in_layer))
         resnetModel.summary()
         print kernel.shape
 
@@ -102,7 +102,7 @@ class KerasResNet:
         
         # adding dense layers
         for kargs in dense_list:
-            denlayer = Dropout(0.75) (Dense(**kargs) (denlayer))
+            denlayer = Dropout(0.5) (Dense(**kargs) (denlayer))
         
         out_layer = Dense(self.output_dim, activation='softmax') (denlayer)
         self.model = Model(inputs=[in_layer], outputs=[out_layer])
