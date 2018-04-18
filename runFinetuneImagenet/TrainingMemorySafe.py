@@ -43,14 +43,14 @@ class Validation(Callback):
 
 class Trainer:
 
-    def __init__(self, model_name="Xception", train_class_name=None, training_batch_size=100, existing_weight=None, test_percentage=0.02, learning_rate=0.0002, validation_every_X_batch=5):
+    def __init__(self, model_name="Xception", train_class_name=None, training_batch_size=100, existing_weight=None, test_percentage=0.02, learning_rate=0.0001, validation_every_X_batch=5):
 
         if train_class_name == None:
             print("You must specify train_class_name")
             return
 
         self.validation_every_X_batch = validation_every_X_batch
-        self.model_file = "{date:%Y-%m-%d %H:%M:%S}".format( date=datetime.datetime.now())
+        self.model_file = "{date:%Y-%m-%d-%H-%M-%S}".format( date=datetime.datetime.now())
         print("model_folder: ", self.model_file)
 
         self.train_class_name = train_class_name
@@ -135,7 +135,7 @@ class Trainer:
 
         self.X_T = []
         for index in range(self.X_test.shape[0]):
-            image = Image.open("base/" + self.X_train[index])
+            image = Image.open("base/" + self.X_test[index])
             img_array = np.asarray(image)
             if img_array.shape != self.img_shape_full:
                 image = image.resize((img_size, img_size), Image.ANTIALIAS)
@@ -145,7 +145,7 @@ class Trainer:
 
     def train(self, epochs=100):
         checkpoint = ModelCheckpoint(os.path.join("models", self.train_class_name, self.model_file, "weights.hdf5"), monitor='val_acc', verbose=1, save_best_only=True, mode='max')
-        self.model.fit_generator(self.generate_arrays_from(), max_queue_size=2, steps_per_epoch=int(self.X_train.shape[0] / self.training_batch_size), class_weight=self.class_weight, epochs=epochs, callbacks=[Validation(self.model, self.validation_every_X_batch, self.num_classes, self.X_T, self.y_test), checkpoint])
+        self.model.fit_generator(self.generate_arrays_from(), max_queue_size=2, steps_per_epoch=int(self.X_train.shape[0] / self.training_batch_size), class_weight=self.class_weight, epochs=epochs, validation_data=(self.X_T, self.y_test), callbacks=[Validation(self.model, self.validation_every_X_batch, self.num_classes, self.X_T, self.y_test), checkpoint])
 
     def generate_arrays_from(self):
         Y = []
