@@ -151,7 +151,7 @@ class Trainer:
         self.X_T = np.array(self.X_T)
 
     def train(self, epochs=100):
-        checkpoint = ModelCheckpoint(os.path.join("models", self.train_class_name, self.model_file, "weights.hdf5"), monitor='val_acc', verbose=1, save_best_only=True, mode='max')
+        checkpoint = ModelCheckpoint(os.path.join("models", self.train_class_name, self.model_file, "weights.hdf5"), monitor='val_loss', verbose=1, save_best_only=True, mode='max')
         self.model.fit_generator(self.generate_arrays_from(), max_queue_size=2, steps_per_epoch=int(self.X_train.shape[0] / self.training_batch_size * self.save_frequency), class_weight=self.class_weight, epochs=epochs, validation_data=(self.X_T, self.y_test), callbacks=[Validation(self.model, self.validation_every_X_batch, self.num_classes, self.X_T, self.y_test), checkpoint])
 
     def generate_arrays_from(self):
