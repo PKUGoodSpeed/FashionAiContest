@@ -11,13 +11,8 @@ from sklearn.model_selection import train_test_split
 
 from keras.models import load_model
 from tensorflow.python.keras.models import load_model
-from tensorflow.python.keras.models import Sequential
-from tensorflow.python.keras.layers import InputLayer, Input
-from tensorflow.python.keras.layers import Reshape, MaxPooling2D
-from tensorflow.python.keras.layers import Conv2D, Dense, Flatten, Dropout
 from keras.utils.np_utils import to_categorical
 from sklearn.metrics import classification_report
-from tensorflow.python.keras.optimizers import Adam
 
 img_size = 512
 
@@ -26,7 +21,7 @@ test_percentage = 0.05
 img_size_flat = img_size * img_size * 3
 img_shape_full = (img_size, img_size, 3)
 
-replace = True
+replace = False
 
 def classify_model(class_name, model_path):
 
