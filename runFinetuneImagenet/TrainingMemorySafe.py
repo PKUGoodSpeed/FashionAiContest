@@ -96,8 +96,8 @@ class Trainer:
             base_model = inception_resnet_v2.InceptionResNetV2(input_tensor=input_tensor, weights='imagenet', include_top=False, classes=self.num_classes)
 
         x = base_model.output
-        x = GlobalAveragePooling2D()(x)
         model = Dropout(0.2)(x)
+        x = GlobalAveragePooling2D()(x)
         predictions = Dense(self.num_classes, activation='softmax')(x)
 
         # this is the model we will train
@@ -154,7 +154,7 @@ class Trainer:
 
     def train(self, epochs=100):
         checkpoint = ModelCheckpoint(os.path.join("models", self.train_class_name, self.model_file, "weights.hdf5"), monitor='val_acc', verbose=1, save_best_only=True, mode='max')
-        self.model.fit_generator(self.generate_arrays_from(), max_queue_size=2, class_weight=self.class_weight, steps_per_epoch=int(self.X_train.shape[0] / self.training_batch_size * self.save_frequency), epochs=epochs, validation_data=(self.X_T, self.y_test), callbacks=[Validation(self.model, self.validation_every_X_batch, self.num_classes, self.X_T, self.y_test), checkpoint])
+        self.model.fit_generator(self.generate_arrays_from(), class_weight=self.class_weight, steps_per_epoch=int(self.X_train.shape[0] / self.training_batch_size * self.save_frequency), epochs=epochs, validation_data=(self.X_T, self.y_test), callbacks=[Validation(self.model, self.validation_every_X_batch, self.num_classes, self.X_T, self.y_test), checkpoint])
 
     def generate_arrays_from(self):
         Y = []
