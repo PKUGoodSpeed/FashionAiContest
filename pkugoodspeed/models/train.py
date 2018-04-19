@@ -64,10 +64,10 @@ class Trainer:
         checkpointer = ModelCheckpoint(filepath=checker, monitor='val_acc', verbose=1, save_best_only=True, mode='auto')
         
         if valid_set is None:
-            history = self.model.fit(x, y, epochs=epochs, verbose=1, validation_split=0.05, batch_size=16,
+            history = self.model.fit(x, y, epochs=epochs, verbose=1, validation_split=0.05, batch_size=12,
             class_weight=class_weights, callbacks=[earlystopper, checkpointer, change_lr])
         else:
-            history = self.model.fit(x, y, epochs=epochs, verbose=1, validation_data=valid_set, batch_size=16,
+            history = self.model.fit(x, y, epochs=epochs, verbose=1, validation_data=valid_set, batch_size=12,
             class_weight=class_weights, callbacks=[earlystopper, checkpointer, change_lr])
         return history
     
