@@ -53,8 +53,8 @@ def classify_model(class_name, model_path):
             if img_array.shape != img_shape_full:
                 image = image.resize((img_size, img_size), Image.ANTIALIAS)
                 img_array = np.asarray(image)
-            tests.append(img_array)
-            rows.append(row / 255)
+            tests.append(img_array/ 255)
+            rows.append(row)
             index += 1
             if index % 500 == 0:
                 print(index)
