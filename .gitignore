@@ -38,6 +38,5 @@ apps/
 *.hdf5
 *.h5
 
-runFinetuneImagenet/models/*
 runFinetuneImagenet/base/*
 runFinetuneImagenet/rank/*

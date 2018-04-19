@@ -34,7 +34,7 @@ class Validation(Callback):
 
 class Trainer:
 
-    def __init__(self, model_name="Xception", train_class_name=None, training_batch_size=100, test_percentage=0.02, learning_rate=0.0001, validation_every_X_batch=5, saving_frequency=1, gpu_num=1):
+    def __init__(self, model_name="Xception", train_class_name=None, training_batch_size=100, test_percentage=0.02, learning_rate=0.0001, validation_every_X_batch=5, saving_frequency=1, gpu_num=1, dropout=0.2):
 
         if train_class_name == None:
             print("You must specify train_class_name")
@@ -62,7 +62,6 @@ class Trainer:
 
         with open('base/Annotations/label.csv', 'r') as csvfile:
             reader = csv.reader(csvfile)
-            all_class_samples = []
             for row in reader:
                 if row[1] == self.train_class_name:
                     self.num_classes = len(row[2])
@@ -89,7 +88,7 @@ class Trainer:
             base_model = inception_resnet_v2.InceptionResNetV2(input_tensor=input_tensor, weights='imagenet', include_top=False, classes=self.num_classes)
 
         x = base_model.output
-        x = Dropout(0.2)(x)
+        x = Dropout(dropout)(x)
         x = GlobalAveragePooling2D()(x)
         predictions = Dense(self.num_classes, activation='softmax')(x)
 

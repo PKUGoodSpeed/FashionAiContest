@@ -15,5 +15,6 @@ Run `python3 train_fasion.py` with arguments.
 --validation_every_X_batch 5  # calculate precision, recall, f1 every X batch, set this smaller will increase speed
 --memory_safe (1 or 0)
 --saving_frequency 0 - 1  # set to 1 it saves every epoch, set to 0.5 it saves every 1/2 epoch
+--dropout 0.2
 ```
 

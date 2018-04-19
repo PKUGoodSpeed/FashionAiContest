@@ -22,6 +22,8 @@ img_size = 512
 img_size_flat = img_size * img_size * 3
 img_shape_full = (img_size, img_size, 3)
 
+replace = False
+
 def classify_model(class_name, model_path):
 
     model_path = os.path.join("models", class_name, model_path)
@@ -41,6 +43,9 @@ def classify_model(class_name, model_path):
 
     model = load_model(os.path.join(model_path, model_file_name))
     model.load_weights(os.path.join(model_path, weight_file_name))
+
+    if replace == False and os.path.exists(os.path.join(model_path, 'test_results_formatted.csv')):
+        return
 
     tests = []
     rows = []
@@ -62,14 +67,6 @@ def classify_model(class_name, model_path):
                 print(index)
     results = model.predict(np.array(tests), batch_size=16, verbose=0, steps=None)
 
-    with open(os.path.join(model_path, 'test_results_raw.csv'), 'w') as wfile:
-        writer = csv.writer(wfile, delimiter=',')
-
-        for index in range(len(rows)):
-            result = results[index]
-            row = rows[index]
-            writer.writerow(row + result)
-
     with open(os.path.join(model_path, 'test_results_formatted.csv'), 'w') as wfile:
         writer = csv.writer(wfile, delimiter=',')
 
@@ -83,6 +80,17 @@ def classify_model(class_name, model_path):
 
             row = rows[index]
             row[-1] = ans
+            writer.writerow(row)
+
+    with open(os.path.join(model_path, 'test_results_raw.csv'), 'w') as wfile:
+        writer = csv.writer(wfile, delimiter=',')
+
+        for index in range(len(rows)):
+            result = results[index]
+            row = rows[index]
+            del row[-1]
+            for r in result:
+                row.append(r)
             writer.writerow(row)
 
     print("Finished Classifying: ", model_path)

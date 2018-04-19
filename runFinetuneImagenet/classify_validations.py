@@ -7,6 +7,8 @@ import csv, os
 import math
 from PIL import Image
 
+from sklearn.model_selection import train_test_split
+
 from keras.models import load_model
 from tensorflow.python.keras.models import load_model
 from tensorflow.python.keras.models import Sequential
@@ -19,8 +21,12 @@ from tensorflow.python.keras.optimizers import Adam
 
 img_size = 512
 
+test_percentage = 0.05
+
 img_size_flat = img_size * img_size * 3
 img_shape_full = (img_size, img_size, 3)
+
+replace = False
 
 def classify_model(class_name, model_path):
 
@@ -42,47 +48,56 @@ def classify_model(class_name, model_path):
     model = load_model(os.path.join(model_path, model_file_name))
     model.load_weights(os.path.join(model_path, weight_file_name))
 
-    tests = []
-    rows = []
-    index = 0
-    with open('rank/Tests/question.csv', 'r') as csvfile:
+    if replace == False and os.path.exists(os.path.join(model_path, 'validation_results.csv')):
+        return
+
+    with open('base/Annotations/label.csv', 'r') as csvfile:
         reader = csv.reader(csvfile)
+        all_class_samples = []
         for row in reader:
             if row[1] != class_name:
                 continue
-            image = Image.open("rank/" + row[0])
+            all_class_samples.append(row)
+
+        Y = []
+        X = []
+        for row in all_class_samples:
+            X.append(row[0])
+            Y.append(row[2].index("y"))
+
+    num_classes = 5
+    with open('base/Annotations/label.csv', 'r') as csvfile:
+        reader = csv.reader(csvfile)
+        for row in reader:
+            if row[1] == class_name:
+                num_classes = len(row[2])
+                break
+
+    Y = to_categorical(Y, num_classes=num_classes)
+    X = np.array(X)
+
+    X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=test_percentage, random_state=42)
+
+    tests = []
+    for index in range(X_test.shape[0]):
+        image = Image.open("base/" + X_test[index])
+        img_array = np.asarray(image)
+        if img_array.shape != img_shape_full:
+            image = image.resize((img_size, img_size), Image.ANTIALIAS)
             img_array = np.asarray(image)
-            if img_array.shape != img_shape_full:
-                image = image.resize((img_size, img_size), Image.ANTIALIAS)
-                img_array = np.asarray(image)
-            tests.append(img_array)
-            rows.append(row)
-            index += 1
-            if index % 500 == 0:
-                print(index)
+        tests.append(img_array / 255)
+    tests = np.array(tests)
+
     results = model.predict(np.array(tests), batch_size=16, verbose=0, steps=None)
 
-    with open(os.path.join(model_path, 'test_results_raw.csv'), 'w') as wfile:
+    with open(os.path.join(model_path, 'validation_results.csv'), 'w') as wfile:
         writer = csv.writer(wfile, delimiter=',')
 
-        for index in range(len(rows)):
+        for index in range(len(X_test)):
             result = results[index]
-            row = rows[index]
-            writer.writerow(row + result)
-
-    with open(os.path.join(model_path, 'test_results_formatted.csv'), 'w') as wfile:
-        writer = csv.writer(wfile, delimiter=',')
-
-        for index in range(len(rows)):
-            result = results[index]
-            ans = ""
+            row = [X_test[index]]
             for r in result:
-                ans += str(int(r * 10000) / 10000)
-                ans += ";"
-            ans = ans[:-1]
-
-            row = rows[index]
-            row[-1] = ans
+                row.append(r)
             writer.writerow(row)
 
     print("Finished Classifying: ", model_path)
