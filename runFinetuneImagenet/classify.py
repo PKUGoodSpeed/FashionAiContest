@@ -23,11 +23,11 @@ img_size_flat = img_size * img_size * 3
 # This is used for reshaping in Keras.
 img_shape_full = (img_size, img_size, 3)
 
-class_name = "skirt_length_labels"
-model_file = "2018-04-16/skirt_length_labels_model.h5"
-weight_file = "2018-04-16/weights.hdf5"
+class_name = "neck_design_labels"
+model_file = "Xception0.9/neck_design_labels_model.h5"
+weight_file = "Xception0.9/weights.hdf5"
 model = load_model(os.path.join("models", class_name, model_file))
-model.load_weights(os.path.join("models", class_name,weight_file))
+model.load_weights(os.path.join("models", class_name, weight_file))
 
 tests = []
 rows = []

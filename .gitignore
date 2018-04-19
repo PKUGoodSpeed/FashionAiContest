@@ -29,8 +29,8 @@ __pycache__/
 .ipyno_launch/
 
 # For other big data file
-*.csv
 feats/
+*.csv
 
 # Executables
 apps/
@@ -38,3 +38,4 @@ apps/
 
 runFinetuneImagenet/models/*
 runFinetuneImagenet/base/*
+runFinetuneImagenet/rank/*
