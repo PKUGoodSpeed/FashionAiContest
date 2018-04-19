@@ -125,23 +125,20 @@ class ImagePrecMemSafe:
     def getOutputDim(self):
         return self._output_dim
 
-    def getTests(self, category, label_file, img_path, pad_square=False, size=None):
+    def getTests(self, category, label_file, img_path):
         """ Used when making predictions for the test case """
         start_time = time.time()
         df = pd.read_csv(label_file, names=['fname', 'category', 'class'])
         assert category in set(df['category'].values), "Wrong category name."
         df = df[df['category'] == category]
         self._df = df
-        self._imgs = []
+        self._fnames = []
         self._labels = []
         for fname, label in zip(df['fname'].tolist(), df['class'].tolist()):
             img = imread(img_path+'/'+fname)/255.
             assert img.shape[2] == 3, "There are images having other than 3 channels."
-            if pad_square:
-                img = _pad_square(img)
-            if size is not None:
-                assert type(size) == int, "The size of images should be integer."
-                img = resize(img, (size, size), mode='edge', preserve_range=True)
+            img = _pad_square(img)
+            img = resize(img, (self._size, self._size), mode='edge', preserve_range=True)
             self._imgs.append(img)
             self._labels.append(label)
         self._input_shape = (size, size, 3)

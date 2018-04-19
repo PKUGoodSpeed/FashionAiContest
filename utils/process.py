@@ -72,6 +72,7 @@ class ImagePrec:
             if size is not None:
                 assert type(size) == int, "The size of images should be integer."
                 img = resize(img, (size, size), mode='edge', preserve_range=True)
+            img = img.astype(np.float32)
             self._imgs.append(img)
             self._labels.append(label)
         self._input_shape = (size, size, 3)
@@ -131,6 +132,7 @@ class ImagePrec:
             if size is not None:
                 assert type(size) == int, "The size of images should be integer."
                 img = resize(img, (size, size), mode='edge', preserve_range=True)
+            img = img.astype(np.float32)
             self._imgs.append(img)
             self._labels.append(label)
         self._input_shape = (size, size, 3)
