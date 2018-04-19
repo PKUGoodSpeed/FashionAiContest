@@ -16,7 +16,7 @@ from tensorflow.python.keras.layers import InputLayer, Input
 from tensorflow.python.keras.layers import Reshape, MaxPooling2D
 from tensorflow.python.keras.layers import Conv2D, Dense, Flatten, Dropout
 from keras.utils.np_utils import to_categorical
-from keras.callbacks import Callback
+from sklearn.metrics import classification_report
 from tensorflow.python.keras.optimizers import Adam
 
 img_size = 512
@@ -26,7 +26,7 @@ test_percentage = 0.05
 img_size_flat = img_size * img_size * 3
 img_shape_full = (img_size, img_size, 3)
 
-replace = False
+replace = True
 
 def classify_model(class_name, model_path):
 
@@ -89,6 +89,9 @@ def classify_model(class_name, model_path):
     tests = np.array(tests)
 
     results = model.predict(np.array(tests), batch_size=16, verbose=0, steps=None)
+
+    y_classes = results.argmax(axis=-1)
+    print(classification_report(y_test, to_categorical(y_classes, num_classes=num_classes)))
 
     with open(os.path.join(model_path, 'validation_results.csv'), 'w') as wfile:
         writer = csv.writer(wfile, delimiter=',')

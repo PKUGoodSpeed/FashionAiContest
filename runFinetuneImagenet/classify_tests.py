@@ -22,7 +22,7 @@ img_size = 512
 img_size_flat = img_size * img_size * 3
 img_shape_full = (img_size, img_size, 3)
 
-replace = False
+replace = True
 
 def classify_model(class_name, model_path):
 
