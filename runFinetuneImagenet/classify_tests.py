@@ -56,8 +56,8 @@ def classify_model(class_name, model_path):
             tests.append(img_array)
             rows.append(row)
             index += 1
-            if index == 5:
-                break
+            # if index == 10:
+            #     break
             if index % 500 == 0:
                 print(index)
     results = model.predict(np.array(tests), batch_size=16, verbose=0, steps=None)
