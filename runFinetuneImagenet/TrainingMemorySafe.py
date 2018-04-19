@@ -4,16 +4,9 @@ from PIL import Image
 import datetime
 
 from keras.utils import multi_gpu_model
-from keras.models import Sequential
-from keras.layers import InputLayer, Input
-from keras.layers import Reshape, MaxPooling2D
-from keras.layers import Conv2D, Dense, Flatten, Dropout
 from keras.utils.np_utils import to_categorical
-from keras.callbacks import Callback
-from keras import optimizers
 from sklearn.metrics import classification_report
 
-from keras.callbacks import ModelCheckpoint
 from sklearn.model_selection import train_test_split
 
 from keras.layers import *
@@ -41,7 +34,7 @@ class Validation(Callback):
 
 class Trainer:
 
-    def __init__(self, model_name="Xception", train_class_name=None, training_batch_size=100, existing_weight=None, test_percentage=0.02, learning_rate=0.0001, validation_every_X_batch=5, saving_frequency=1, gpu_num=1):
+    def __init__(self, model_name="Xception", train_class_name=None, training_batch_size=100, test_percentage=0.02, learning_rate=0.0001, validation_every_X_batch=5, saving_frequency=1, gpu_num=1):
 
         if train_class_name == None:
             print("You must specify train_class_name")
@@ -96,7 +89,7 @@ class Trainer:
             base_model = inception_resnet_v2.InceptionResNetV2(input_tensor=input_tensor, weights='imagenet', include_top=False, classes=self.num_classes)
 
         x = base_model.output
-        model = Dropout(0.2)(x)
+        x = Dropout(0.2)(x)
         x = GlobalAveragePooling2D()(x)
         predictions = Dense(self.num_classes, activation='softmax')(x)
 

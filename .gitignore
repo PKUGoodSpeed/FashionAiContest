@@ -30,11 +30,13 @@ __pycache__/
 
 # For other big data file
 feats/
-*.csv
 
 # Executables
 apps/
 *.exe
+
+*.hdf5
+*.h5
 
 runFinetuneImagenet/models/*
 runFinetuneImagenet/base/*
