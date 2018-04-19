@@ -15,7 +15,7 @@ img_size = 512
 img_size_flat = img_size * img_size * 3
 img_shape_full = (img_size, img_size, 3)
 
-replace = False
+replace = True
 
 def classify_model(class_name, model_path):
 
@@ -54,10 +54,8 @@ def classify_model(class_name, model_path):
                 image = image.resize((img_size, img_size), Image.ANTIALIAS)
                 img_array = np.asarray(image)
             tests.append(img_array)
-            rows.append(row)
+            rows.append(row / 255)
             index += 1
-            # if index == 10:
-            #     break
             if index % 500 == 0:
                 print(index)
     results = model.predict(np.array(tests), batch_size=16, verbose=0, steps=None)
