@@ -11,7 +11,7 @@ checkpoints*
 logs/
 summary/
 embs/
-
+submissions/
 # PyCharm
 .idea/
 
