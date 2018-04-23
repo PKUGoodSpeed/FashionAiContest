@@ -14,6 +14,8 @@
 Model implementations are in `models`.
 We tried: `naive CNNs`, `vgg16`, `vgg19`, `Resnet50`, `inception`, and `xception`, among which the `xception` net perform best for most of the labels.
 
+Loss: "categorical_crossentropy" loss for multi-class classifications.
+
 
 ## Training and Predicting:
 (How to run the code.)
