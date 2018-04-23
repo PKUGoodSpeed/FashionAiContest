@@ -11,7 +11,7 @@
 
 - For ensembling purpose, group members run the training code using the same `train_validation_split`.
 - After training, we share the predictions for both validation set and testing set.
-- We tried to ways of ensembling:
+- We tried two ways of ensembling:
     1. Train a shallow network (only one hidden layer), whose input is the validation predictions, and the output is the actually labels of the validation set.
     2. Use a simple linear combination. The optimal ways is obtained via grid search.
 
