@@ -1,6 +1,6 @@
 # [2018 Fashion AI Global Challenge](https://tianchi.aliyun.com/markets/tianchi/FashionAIeng?_lang=en_US)
 
-## Intro:
+## Intro: *(Copied from the competition website)*
 Upgrades in consumption patterns mean that there is significant room for potential growth in the fashion industry. According to official statistics from different countries, the market value of the global apparel market is worth over USD 3 trillion. Although artificial intelligence (AI) technology has been evolving along with the fashion industry, there are still different challenges in different areas that need to be addressed.
 
 The Vision & Beauty Team, Alibaba Group and Institute of Textile & Clothing, The Hong Kong Polytechnic University are pleased to announce that they are co-organizing the FashionAI Global Challenge 2018, which will jointly launch a revolutionary dataset which integrates both professional fashion knowledge and machine learning formulation. The world's first FashionAI Global Challenge offers RMB 1.34 million prize pool, inviting you to solve the imminent issues on the application of AI in fashion.
